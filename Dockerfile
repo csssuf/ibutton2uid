@@ -3,7 +3,10 @@ MAINTAINER James Forcier "csssuf@csssuf.net"
 
 EXPOSE 8080
 
+RUN adduser -S ibutton2uid
+
 COPY . /app
+RUN chown -R ibutton2uid /app
 WORKDIR /app
 
 RUN apk upgrade --no-cache && \
@@ -13,6 +16,8 @@ update-ca-certificates
 RUN echo "tls_cacertdir /etc/ssl/certs" >> /etc/openldap/ldap.conf
 
 RUN pip install --no-cache-dir -r requirements.txt
+
+USER ibutton2uid
 
 ENTRYPOINT ["python"]
 CMD ["ibutton2uid.py"]
